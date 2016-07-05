@@ -18,6 +18,7 @@ class MainTitle extends Component{
             icon = <Icon type="shopping-cart" />;
         }
         return (
+        		
             <div className="want-main-title" aria-hidden="true">
                 &nbsp;&nbsp;{icon}&nbsp;{this.props.title}
             </div>
