@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.plus.want.dao.LikeDAO">
+	<select id="getLikeUserBrief" parameterType="java.util.Map" resultType="com.plus.want.model.usermodel.UserBrief">
+		SELECT
+			wu.userId,
+			wu.headImg
+		FROM
+			want_user wu
+		INNER JOIN
+			want_like wl
+		ON
+			wl.userId = wu.userId
+		WHERE
+			wl.commodityId = #{commodityId}
+		ORDER BY 
+        	wu.userId DESC 
+       	LIMIT 0,#{onePageNum}
+	</select>
+	
+	<insert id="commodityLike"  parameterType="java.util.Map" >
+		INSERT INTO
+			want_like(
+				userId,
+				commodityId
+			)
+		VALUES
+			(
+				#{userId},	
+				#{commodityId}
+			)
+	</insert>
+</mapper>

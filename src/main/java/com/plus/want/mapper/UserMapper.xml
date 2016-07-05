@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.plus.want.dao.UserDAO">
+	<select id="selectByUserEmail" parameterType="String" resultType="com.plus.want.entity.User">
+		SELECT
+			userId,
+			userEmail,
+			userPhone,
+			nickName
+		FROM
+			want_user
+		WHERE
+			userEmail = #{userEmail}
+	</select>
+	
+	<select id="selectByUserPhone" parameterType="String" resultType="com.plus.want.entity.User">
+		SELECT
+			userId,
+			userEmail,
+			userPhone,
+			nickName
+		FROM
+			want_user
+		WHERE
+			userPhone = #{userPhone}
+	</select>
+	
+    <select id="selectUserByCondition" parameterType="java.util.Map" resultType="com.plus.want.entity.User">
+        SELECT
+			userId,
+			userName
+		FROM
+			want_user
+		<where>
+			<if test="userId != null">
+				userId = #{userId}
+			</if>
+			<if test="userName != null and userName != ''">
+			AND
+				userName = #{userName}	
+			</if>
+			<if test="userPassword !=null">
+			AND
+				userPassword = #{userPassword}
+			</if>
+		</where>
+    </select>
+    
+    <insert id="emailRegister" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+    	INSERT INTO
+    		want_user(
+    			userEmail,
+    			userPassword)
+    	VALUES (
+    			#{userEmail},
+    			#{userPassword})
+    </insert>
+    
+    <insert id="phoneRegister" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+    	INSERT INTO
+    		want_user(
+    			userPhone,
+    			userPassword)
+    	VALUES (
+    			#{userPhone},
+    			#{userPassword})
+    </insert>
+    
+    <select id="selectByUserId" parameterType="int" resultType="com.plus.want.entity.User">
+    	SELECT
+			userId,
+			userEmail,
+			userPhone,
+			headImg,
+			nickName,
+			personalBlog,
+			personalDescribe
+		FROM
+			want_user
+		WHERE
+			userId=#{userId}
+    </select>
+    
+    <select id="emailLogin" parameterType="java.util.Map" resultType="com.plus.want.entity.User">
+    	SELECT
+    		userId,
+			userEmail,
+			userPhone,
+			headImg,
+			nickName,
+			personalBlog,
+			personalDescribe
+		FROM
+			want_user
+		WHERE
+			userEmail=#{userEmail}
+		AND
+			userPassword = #{userPassword}
+    </select>
+    
+     <select id="phoneLogin" parameterType="java.util.Map" resultType="com.plus.want.entity.User">
+    	SELECT
+    		userId,
+			userEmail,
+			userPhone,
+			headImg,
+			nickName,
+			personalBlog,
+			personalDescribe
+		FROM
+			want_user
+		WHERE
+			userPhone=#{userPhone}
+		AND
+			userPassword = #{userPassword}
+    </select>
+    
+    <update id="updateUserInfo" parameterType="com.plus.want.entity.User">
+    	UPDATE 
+    		want_user
+    	SET
+    		nickName = #{nickName},
+    		personalBlog = #{personalBlog},
+    		personalDescribe = #{personalDescribe}
+    	WHERE
+    		userId = #{userId}
+    </update>
+    
+    <select id="getUserPersonalInfo" parameterType="int" resultType="com.plus.want.entity.User">
+    	SELECT
+			userId,
+			headImg,
+			nickName,
+			personalBlog,
+			personalDescribe
+		FROM
+			want_user
+		WHERE
+			userId=#{userId}
+    </select>
+    
+    <select id="getUserCount" resultType="int">
+    	SELECT
+    		 count(*) 
+    	FROM
+    		want_user
+    </select>
+    
+    <select id="getUserList" parameterType="java.util.Map" resultType="com.plus.want.entity.User">
+    	SELECT
+    		userId,
+			userEmail,
+			userPhone,
+			headImg,
+			nickName,
+			personalBlog,
+			personalDescribe,
+			state
+		FROM
+			want_user
+		ORDER BY 
+			userId	
+		LIMIT #{limit} OFFSET #{offset};
+    </select>
+</mapper>

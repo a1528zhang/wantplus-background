@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+</head>
+<body>
+
+	<div id="t2" >
+		<input v-model="parentMsg">
+		<component1 id="{{a}}" :msg="parentMsg"></component1>
+	</div>
+	<div id="t3">
+	</div>
+	<div id="t4">
+		<my-component></my-component>
+	</div>
+</body>
+<script src="vue.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+
+	var data1={a:1}
+	
+	Vue.component('component1', {
+		 props:{
+			 propA: Number,
+			 // 必需且是字符串
+			 propB: {
+				 type: String,
+				 required: true
+			 }
+		 } ,
+		 replace:false,
+		  template: '<div>{{msg}} custom component!</div>'
+		})
+	var vm = new Vue({
+	  el: '#t2',
+	  data:{
+		  a:1,
+		  aaa:[
+	        { message: 'Bar'},
+		    { message: 'Foo' },
+		    { message: 'a' },
+		    { message: 's' }
+		    ]},
+	});
+	
+	var Profile = Vue.extend({
+		  template: '<p>{{firstName}} {{lastName}} aka {{alias}}</p>'
+		})
+	
+	var profile = new Profile({
+		el:"#t3",
+		replace:false,
+		  data: {
+		    firstName: 'Walter',
+		    lastName: 'White',
+		    alias: 'Heisenberg'
+		  }  
+		})
+	
+	// 定义
+	var MyComponent = Vue.extend({
+	  template: '<div>{{a}} custom component!</div>'//将要替换<my-component>的内容
+	})
+	// 注册
+	Vue.component('my-component', MyComponent)//这里将MyComponent注册为html标签
+	// 创建根实例
+	var ss = new Vue({
+	  el: '#t4',
+	  data:{
+		  a:"asd"
+	  }
+	})
+</script>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html" charset="UTF-8">
+<title>Insert title here</title>
+<script src="http://libs.useso.com/js/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
+<script src="/wantplus/js/ajaxfileupload.js"></script>
+<script type="text/javascript">
+function one(){
+	var str = "?detailsId=12345=666";
+	var a = str.indexOf("?detailsId=");
+	
+	console.log(str.substring(a+11));
+	 /* $.ajax({
+        type: "GET",
+        url: "/wantplus/action/commodity/getCommodityById?commodityId=21",
+        dataType: "jsonp",
+        jsonp:'jsonpcallback',
+        success: function(data){
+       	 console.log(data);
+        }
+	 }); */
+}
+
+function two(){
+	 $.ajax({
+       type: "GET",
+       url: "/wantplus/action/commodity/getAllLCommodity?page=1",
+       dataType: "json",
+       success: function(data){
+      	 console.log(data);
+       }
+	 });
+}
+
+function uploadCommodity(){
+	$.ajaxFileUpload({
+		type:"POST", 
+        url:'/wantplus/action/commodity/newCommodityUpload',  
+        secureuri:false,  
+        fileElementId:'file',//file标签的id  
+        dataType: "json",//返回数据的类型  
+        data:{
+        	userName:"az",
+        	commodityName:$("#commodityName").val(),
+        	commodityPrice:$("#commodityPrice").val(),
+        	commodityUploadUser:$("#commodityUploadUser").val(),
+        	commodityLike:$("#commodityLike").val(),
+        	commodityCollection:$("#commodityCollection").val(),
+        	shopId:$("#shopId").val(),
+        	platform:$("#platform").val()
+        },
+        success: function (data) {
+        	console.log(data);
+        } 
+    }); 
+}
+
+function register(){
+	$.ajax({
+		type:"POST", 
+        url:'/wantplus/action/user/register',  
+        fileElementId:'file',//file标签的id  
+        dataType: "json",//返回数据的类型  
+        data:{
+        	username:$("#username").val(),
+        	password:$("#password").val()
+        },
+        success: function (data) {
+        	console.log(data);
+        }
+	})
+}
+
+function login(){
+	$.ajax({
+		type:"POST", 
+        url:'/wantplus/action/user/login',  
+        fileElementId:'file',//file标签的id  
+        dataType: "json",//返回数据的类型  
+        data:{
+        	username:$("#loginUsername").val(),
+        	password:$("#loginPassword").val()
+        },
+        success: function (data) {
+        	console.log(data);
+        }
+	})
+}
+
+function logout(){
+	$.ajax({
+		type:"POST", 
+        url:'/wantplus/action/user/logout',  
+        fileElementId:'file',//file标签的id  
+        dataType: "json",//返回数据的类型  
+        success: function (data) {
+        	console.log(data);
+        }
+	})
+}
+
+function update(){
+	$.ajax({
+		type:"POST", 
+        url:'/wantplus/action/user/updateUserInfo', 
+        data:{
+        	nickName:$("#nickName").val(),
+        	personalBlog:$("#personalBlog").val(),
+        	personalDescribe:$("#personalDescribe").val()
+        		},
+        fileElementId:'file',//file标签的id  
+        dataType: "json",//返回数据的类型  
+        success: function (data) {
+        	console.log(data);
+        }
+	})
+}
+
+</script>
+</head>
+<body>
+	<button onclick="one()">one</button>
+	<button onclick="two()">two</button>
+	<a>商品名称：</a><input id="commodityName" type="text"/><br>
+	<a>商品价格：</a><input id="commodityPrice" type="text"/><br>
+	<a>商品上传用户id：</a><input id="commodityUploadUser" type="text"/><br>
+	<a>商品点赞人数：</a><input id="commodityLike" type="text"/><br>
+	<a>商品收藏人数：</a><input id="commodityCollection" type="text"/><br>
+	<a>商品所属商店id：</a><input id="shopId" type="text"/><br>
+	<a>商品所属平台：</a><input id="platform" type="text"/><br>
+	<a>商品照片：</a><input type="file" name="file" id="file"/><br>
+	<button onclick="uploadCommodity()">upload</button><br>
+	<div id="register">
+		<button onclick="register()">注册</button>
+		<a>用户名：</a><input id="username" type="text"/>
+		<a>密码：</a><input id="password" type="text"/><br>
+	</div>
+	<div id="login">
+		<button onclick="login()">登录</button>
+		<a>用户名：</a><input id="loginUsername" type="text"/>
+		<a>密码：</a><input id="loginPassword" type="text"/><br>
+	</div>
+	<button onclick="logout()">注销</button>
+	<div id="update">
+		<a>昵称：</a><input id="nickName" type="text"/>
+		<a>个人博客：</a><input id="personalBlog" type="text"/>
+		<a>个人描述：</a><input id="personalDescribe" type="text"/>
+		<button onclick="update()">更新个人信息</button>
+	</div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.plus.want.dao.ShopDAO">
+	<insert id="addShop" parameterType="com.plus.want.entity.Shop">
+		INSERT INTO
+			want_shop(
+				shopName,
+				shopUrl,
+				shopIcon,
+				shopDescribe,
+				shopBackground
+			)
+		VALUES
+			(
+				#{shopName},	
+				#{shopUrl},
+				#{shopIcon},
+				#{shopDescribe},
+				#{shopBackground}
+			)
+	</insert>
+	
+	<select id="getShopInfo" parameterType="int" resultType="com.plus.want.entity.Shop">
+		SELECT
+			shopId,
+			shopName,
+			shopUrl,
+			shopIcon,
+			shopDescribe,
+			shopBackground
+		FROM
+			want_shop
+		WHERE
+			shopId = #{shopId}
+	</select>
+	
+	<select id="getShopCommodity" parameterType="int" resultType="com.plus.want.model.commoditymodel.CommodityInfoModel">
+		SELECT 
+        	c.commodityId,
+        	c.commodityName,
+        	c.commodityPrice,
+        	c.commodityUploadUser,
+        	c.commodityLike,
+        	c.commodityCollection,
+        	c.platform,
+        	c.shopId,
+        	s.shopName,
+        	s.shopUrl,
+        	s.shopIcon,
+        	u.userName AS commodityUploadUserName,
+        	i.commodityImgUrl,
+        	i.commodityImgSize
+       	FROM
+        	want_commodity_info c
+        INNER JOIN
+        	want_user u
+        ON
+        	c.commodityUploadUser = u.userId
+        LEFT JOIN
+        	want_commodity_img i
+        ON
+        	c.commodityId = i.commodityId
+        LEFT JOIN
+        	want_shop s
+        ON
+        	c.shopId = s.shopId
+        WHERE
+       		i.commodityImgSize = 2
+       	AND 
+       		s.shopId = #{shopId}
+       	ORDER BY 
+        	c.uploadTime DESC 
+       	LIMIT #{page},12
+	</select>
+</mapper>
