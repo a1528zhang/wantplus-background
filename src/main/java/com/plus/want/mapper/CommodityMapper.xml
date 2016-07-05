@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.plus.want.dao.CommodityDAO">
+	<select id="getAllLCommodity" parameterType="int" resultType="com.plus.want.model.commoditymodel.CommodityInfoModel">
+		SELECT 
+        	c.commodityId,
+        	c.commodityName,
+        	c.commodityPrice,
+        	c.commodityUploadUser,
+        	c.commodityLike,
+        	c.commodityCollection,
+        	c.platform,
+        	c.shopId,
+        	s.shopName,
+        	s.shopUrl,
+        	s.shopIcon,
+        	u.userEmail AS commodityUploadUserName,
+        	i.commodityImgUrl,
+        	i.commodityImgSize
+       	FROM
+        	want_commodity_info c
+        INNER JOIN
+        	want_user u
+        ON
+        	c.commodityUploadUser = u.userId
+        LEFT JOIN
+        	want_commodity_img i
+        ON
+        	c.commodityId = i.commodityId
+        LEFT JOIN
+        	want_shop s
+        ON
+        	c.shopId = s.shopId
+        WHERE
+       		i.commodityImgSize = 2
+       	ORDER BY 
+        	c.uploadTime DESC 
+       	LIMIT #{page},12
+	</select>
+	
+	<select id="getCommodityById" parameterType="int" resultType="com.plus.want.model.commoditymodel.CommodityInfoModel">
+		SELECT
+			c.commodityId,
+			c.commodityName,
+        	c.commodityPrice,
+        	c.commodityUploadUser,
+        	c.commodityLike,
+        	c.commodityCollection,
+        	c.platform,
+        	c.shopId,
+        	s.shopName,
+        	s.shopUrl,
+        	s.shopIcon,
+        	u.userName AS commodityUploadUserName,
+        	i.commodityImgUrl,
+        	i.commodityImgSize
+        FROM
+        	want_commodity_info c
+        INNER JOIN
+        	want_user u
+        ON
+        	c.commodityUploadUser = u.userId
+        LEFT JOIN
+        	want_commodity_img i
+        ON
+        	c.commodityId = i.commodityId
+       	AND
+       		i.commodityImgSize = 2
+        LEFT JOIN
+        	want_shop s
+        ON
+        	c.shopId = s.shopId
+        WHERE
+       		c.commodityId = #{commodityId}
+	</select>
+	
+    <select id="selectCommodityByCondition" parameterType="java.util.Map" resultType="com.plus.want.model.commoditymodel.CommodityInfoModel">
+    	SELECT 
+        	c.commodityId,
+        	c.commodityName,
+        	c.commodityPrice,
+        	c.commodityUploadUser,
+        	c.commodityLike,
+        	c.commodityCollection,
+        	c.platform,
+        	s.shopName,
+        	s.shopUrl,
+        	s.shopIcon,
+        	u.userName,
+        	i.commodityImgUrl,
+        	i.commodityImgSize
+        FROM
+        	want_commodity_info c,
+        	want_commodity_img i,
+        	want_user u,
+        	want_shop s
+        <where>
+        	c.commodityUploadUser = u.userId
+        AND
+        	i.commodityId = c.commodityId
+       	AND
+       		s.shopId = c.shopId
+        	<if test="commodityId != null">
+        	AND
+        		c.commodityId = #{commodityId}
+        	</if>
+        	<if test="commodityImgSize != null">
+        	AND
+        		i.commodityImgSize = #{commodityImgSize}
+        	</if>
+        	<if test="commodityUploadUser != null">
+        	AND
+        		i.commodityUploadUser = #{commodityUploadUser}
+        	</if>
+        </where>
+    </select>
+    
+    <insert id="saveCommodityInfo" parameterType="com.plus.want.entity.CommodityInfo">
+    	INSERT INTO
+    		want_commodity_info(
+    			commodityName,
+    			commodityPrice,
+    			commodityUploadUser,
+    			commodityLike,
+    			commodityCollection,
+    			commodityState,
+    			uploadTime,
+    			shopId,
+        		platform
+    		)
+    	VALUES
+    		(
+    			#{commodityName},
+    			#{commodityPrice},
+    			#{commodityUploadUser},
+    			#{commodityLike},
+    			#{commodityCollection},
+    			#{commodityState},
+    			CURRENT_TIMESTAMP,
+    			#{shopId},
+    			#{platform}
+    		)
+   		<selectKey resultType="int" order="AFTER" keyProperty="commodityId">
+			SELECT LAST_INSERT_ID() AS commodityId    
+    	</selectKey>
+    </insert>
+    
+    <insert id="saveCommodityImg" parameterType="com.plus.want.entity.CommodityImg">
+	    INSERT INTO
+	    		want_commodity_img(
+	    			commodityImgUrl,
+	    			commodityImgSize,
+	    			commodityId
+	    		)
+	    	VALUES
+	    		(
+	    			#{commodityImgUrl},
+	    			#{commodityImgSize},
+	    			#{commodityId}
+	    		)
+	</insert>
+	
+	<select id="otherFromShop" parameterType="int" resultType="java.util.Map">
+		SELECT
+			wcin.commodityId,
+			wcin.commodityName,
+			wcim.commodityImgUrl
+		FROM
+        	want_commodity_info wcin
+        INNER JOIN
+        	want_commodity_img wcim
+        ON
+        	wcin.commodityId = wcim.commodityId
+        WHERE
+        	wcim.commodityImgSize = 1
+        AND
+        	wcin.shopId = #{shopId}
+        ORDER BY 
+        	wcin.commodityLike DESC 
+       	LIMIT 0,5
+	</select>
+</mapper>
