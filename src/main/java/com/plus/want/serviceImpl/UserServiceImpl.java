@@ -1,21 +1,29 @@
 package com.plus.want.serviceImpl;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.plus.want.service.UserService;
 import com.plus.want.util.CommonUtil;
 import com.plus.want.dao.UserDAO;
-import com.plus.want.entity.User;
+import com.plus.want.entity.user.User;
 import com.plus.want.model.ResultTemplet;;
 
 @Service("UserService")
@@ -23,28 +31,17 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDAO userDAO;
 	
-	public ResultTemplet<Object> userRegister(String userName,String userPassword){
-		if(CommonUtil.isEmail(userName)){
-			User user = userDAO.selectByUserEmail(userName);
+	public ResultTemplet<Object> userRegister(String username,String userPassword){
+		//只能使用邮箱注册
+		if(CommonUtil.isEmail(username)){
+			User user = userDAO.selectByUsername(username);
 			if (user != null) {
 				return CommonUtil.assembleResult(0,1003,""); 
 			}else{
 				Map<String, Object> registerObj = new HashMap<String, Object>();
-				registerObj.put("userEmail", userName);
+				registerObj.put("userEmail", username);
 				registerObj.put("userPassword", userPassword);
 				Integer userId = userDAO.emailRegister(registerObj);
-				user = userDAO.selectByUserId(userId);
-				return CommonUtil.assembleResult(1, 2000, user);
-			}
-		}else if(CommonUtil.isMobileNO(userName)){
-			User user = userDAO.selectByUserPhone(userName);
-			if (user != null) {
-				return CommonUtil.assembleResult(0,1003,""); 
-			}else{
-				Map<String, Object> registerObj = new HashMap<String, Object>();
-				registerObj.put("userPhone", userName);
-				registerObj.put("userPassword", userPassword);
-				Integer userId = userDAO.phoneRegister(registerObj);
 				user = userDAO.selectByUserId(userId);
 				return CommonUtil.assembleResult(1, 2000, user);
 			}
@@ -55,43 +52,42 @@ public class UserServiceImpl implements UserService {
 	
 	public ResultTemplet<Object> userLogin(String username,String userPassword
 			,HttpServletRequest request,HttpServletResponse response){
-		Map<String, Object> loginObj = new HashMap<String, Object>();
-		User user=null;
-		
-		HttpSession session = request.getSession();
-        //判断session是不是新创建的
-//        if (session.isNew()) {
-        	if(CommonUtil.isEmail(username)){
-    			loginObj.put("userEmail", username);
-    			loginObj.put("userPassword", userPassword);
-    			user = userDAO.emailLogin(loginObj);
-    		}else if(CommonUtil.isMobileNO(username)){
-    			loginObj.put("userPhone", username);
-    			loginObj.put("userPassword", userPassword);
-    			user = userDAO.phoneLogin(loginObj);
-    		}else{
-    			return CommonUtil.assembleResult(0,1001,"");
-    		}
-        	session.setAttribute("user", user);
-    		if (user != null) {
-    			return CommonUtil.assembleResult(1, 2000, user);
-    		}else{
-    			return CommonUtil.assembleResult(0, 1002, "");
-    		}
-//        }else {
-//        	user = (User)session.getAttribute("user");
-//        	return CommonUtil.assembleResult(1, 2000, user);
-//        }
+		String loginName = "";
+		//shiro验证
+		if(CommonUtil.isEmail(username)){
+			loginName = username;
+		}else if(CommonUtil.isMobileNO(username)){
+			User u = userDAO.selectByUserPhone(username);
+			if (u != null) {
+				loginName = u.getUsername();
+			}else {
+				return CommonUtil.assembleResult(0,1007,"");
+			}
+		}else{
+			return CommonUtil.assembleResult(0,1001,"");
+		}
+		Subject subject=SecurityUtils.getSubject();
+		//必须是邮箱进行登录验证
+		UsernamePasswordToken token=new UsernamePasswordToken(loginName, userPassword);
+		User user = new User();
+		try {
+			token.setRememberMe(true);
+			//登录成功后，自动获取权限
+			subject.login(token);
+			user = userDAO.selectByUsername((String)subject.getPrincipal());
+		} catch (IncorrectCredentialsException e) {
+			e.printStackTrace();
+			return CommonUtil.assembleResult(0,1006,"");
+		}catch (UnknownAccountException e) {
+			return CommonUtil.assembleResult(0,1005,"");
+		}
+		return CommonUtil.assembleResult(1,2000,user);
 	}
 	
 	public ResultTemplet<Object> userLogout(HttpServletRequest request,HttpServletResponse response){
-		HttpSession session = request.getSession(false);
-		if(session == null){
-			return CommonUtil.assembleResult(0, 1004, "");
-		}else{
-			session.invalidate();
-			return CommonUtil.assembleResult(1, 2000, "");
-		}
+		Subject subject=SecurityUtils.getSubject();
+		subject.logout();
+		return CommonUtil.assembleResult(1, 2000, "");
 	}
 	
 	public ResultTemplet<Object> updateUserInfo(User param,HttpServletRequest request,HttpServletResponse response){
@@ -130,5 +126,33 @@ public class UserServiceImpl implements UserService {
 		result.put("total", count);
 		result.put("rows", users);
 		return CommonUtil.assembleResult(1, 2000, result);
+	}
+	public ResultTemplet<Object> userBan(Integer[] userId) {
+		System.out.println(userId);
+		return CommonUtil.assembleResult(1, 2000, "ok");
+	}
+	
+	/**
+	 * shiro 需要的方法
+	 */
+	public User getByUserName(String username){
+		try {
+			User user = userDAO.selectByUsername(username);
+			return user;
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("getbyusername出错");
+			return null;
+		}
+	};
+	
+	public Set<String> getRoles(String username){
+		Set<String> roles = userDAO.getRoles(username);
+		return roles;
+	}
+	
+	public Set<String> getPermissions(String username){
+		Set<String> permissions = userDAO.getPermissions(username);
+		return permissions;
 	}
 }

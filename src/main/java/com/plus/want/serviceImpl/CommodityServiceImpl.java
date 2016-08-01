@@ -4,10 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.plus.want.dao.CommodityDAO;
+import com.plus.want.entity.user.User;
 import com.plus.want.model.ResultTemplet;
 import com.plus.want.model.commoditymodel.CommodityInfoModel;
 import com.plus.want.model.usermodel.UserBrief;
@@ -24,7 +29,9 @@ public class CommodityServiceImpl implements CommodityService {
 	private LikeService likeService;
 	
 	@SuppressWarnings("unchecked")
-	public ResultTemplet<Object> getAllLCommodity(Integer page){
+	public ResultTemplet<Object> getAllLCommodity(Integer page,HttpSession session){
+		Subject subject=SecurityUtils.getSubject();
+		System.out.println(subject.getPrincipal());
 		Integer start = (page-1)*12;
 		List<CommodityInfoModel> resultList = commodityDAO.getAllLCommodity(start);
 		for(int i = 0;i<resultList.size();i++){

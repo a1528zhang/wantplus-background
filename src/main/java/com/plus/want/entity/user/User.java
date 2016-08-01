@@ -1,4 +1,4 @@
-package com.plus.want.entity;
+package com.plus.want.entity.user;
 
 /**
  * 用户信息实体类
@@ -7,15 +7,14 @@ package com.plus.want.entity;
  */
 public class User {
 	private Integer userId;
-	private String userEmail;
+	private String username;
 	private String userPhone;
-	private String userPassword;
+	private String password;
 	private String headImg;
 	private String nickName;
 	private String personalBlog;
 	private String personalDescribe;
 	private Integer state;
-	
 	
 	public Integer getState() {
 		return state;
@@ -59,16 +58,16 @@ public class User {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	public String getUserEmail() {
-		return userEmail;
+	public String getUsername() {
+		return username;
 	}
-	public void setUserEmail(String userEmail) {
-		this.userEmail = userEmail;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-	public String getUserPassword() {
-		return userPassword;
+	public String getPassword() {
+		return password;
 	}
-	public void setUserPassword(String userPassword) {
-		this.userPassword = userPassword;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

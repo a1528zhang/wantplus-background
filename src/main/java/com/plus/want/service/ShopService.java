@@ -1,6 +1,6 @@
 package com.plus.want.service;
 
-import com.plus.want.entity.Shop;
+import com.plus.want.entity.shop.Shop;
 import com.plus.want.model.ResultTemplet;
 
 public interface ShopService {

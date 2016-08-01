@@ -19,8 +19,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.plus.want.dao.CommodityDAO;
-import com.plus.want.entity.CommodityImg;
-import com.plus.want.entity.CommodityInfo;
+import com.plus.want.entity.commodity.CommodityImg;
+import com.plus.want.entity.commodity.CommodityInfo;
 import com.plus.want.model.ResultTemplet;
 import com.plus.want.service.CommodityUpDownService;
 import com.plus.want.util.CommonUtil;

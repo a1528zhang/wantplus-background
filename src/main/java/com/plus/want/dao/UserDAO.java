@@ -2,18 +2,27 @@ package com.plus.want.dao;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import com.plus.want.entity.User;
+import com.plus.want.entity.user.User;
 
 public interface UserDAO {
 	/**
 	 * @author 张黎
 	 * @date 2016年5月2日下午3:51:44
 	 * @param 
-	 * @description 按email查找用户
+	 * @description 按email(用户名)查找用户
 	 * @return
 	 */
-	public User selectByUserEmail(String userName);
+	public User selectByUsername(String username);
+	/**
+	 * @author 张黎
+	 * @date 2016年5月2日下午3:51:44
+	 * @param 
+	 * @description 按email(用户名)和密码查找用户
+	 * @return
+	 */
+	public User selectByUsernamePassword(Map<String, Object> obj);
 	/**
 	 * @author 张黎
 	 * @date 2016年5月2日下午4:01:36
@@ -21,7 +30,15 @@ public interface UserDAO {
 	 * @description 按电话查找用户
 	 * @return
 	 */
-	public User selectByUserPhone(String userName);
+	public User selectByUserPhone(String username);
+	/**
+	 * @author 张黎
+	 * @date 2016年5月2日下午4:01:36
+	 * @param 
+	 * @description 按电话和密码查找用户
+	 * @return
+	 */
+	public User selectByUserPhonePassword(Map<String, Object> obj);
 	/**
 	 * @author 张黎
 	 * @date 2016年5月2日下午4:28:31
@@ -101,4 +118,18 @@ public interface UserDAO {
 	 * @return
 	 */
 	public List<User> getUserList(Map<String, Object> condition);
+	
+	/**
+	 * 通过用户id查询角色信息
+	 * @param userId
+	 * @return
+	 */
+	public Set<String> getRoles(String username);
+	
+	/**
+	 * 通过用户id查询权限信息
+	 * @param userId
+	 * @return
+	 */
+	public Set<String> getPermissions(String username);
 }

@@ -1,6 +1,7 @@
 package com.plus.want.service;
 
 import com.plus.want.model.ResultTemplet;
+import javax.servlet.http.HttpSession;
 
 public interface CommodityService {
 	/**
@@ -10,7 +11,7 @@ public interface CommodityService {
 	 * @description 获取所有商品列表，一组12个
 	 * @return
 	 */
-	public ResultTemplet<Object> getAllLCommodity(Integer page);
+	public ResultTemplet<Object> getAllLCommodity(Integer page,HttpSession session);
 	/**
 	 * @author 张黎
 	 * @date 2016年1月14日下午10:24:42

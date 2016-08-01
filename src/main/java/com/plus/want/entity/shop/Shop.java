@@ -1,4 +1,4 @@
-package com.plus.want.entity;
+package com.plus.want.entity.shop;
 /**
  * 商店信息实体类
  * @author a1528zhang

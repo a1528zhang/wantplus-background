@@ -10,6 +10,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<springversion>3.2.3.RELEASE</springversion>  
 		<junitversion>4.11</junitversion>  
+		<shiroversion>1.2.3</shiroversion>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -33,7 +34,6 @@
             <artifactId>junit</artifactId>  
             <version>${junitversion}</version>  
         </dependency>
-          
         <dependency>  
             <groupId>org.springframework</groupId>  
             <artifactId>spring-aop</artifactId>  
@@ -167,7 +167,7 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-		
+		 
         <dependency>  
             <groupId>commons-logging</groupId>  
             <artifactId>commons-logging</artifactId>  
@@ -179,6 +179,24 @@
                 </exclusion>  
             </exclusions> 
         </dependency>  
+        
+        <dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-core</artifactId>
+		    <version>${shiroversion}</version>
+        </dependency>
+        
+        <dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-web</artifactId>
+			<version>1.2.4</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-spring</artifactId>
+			<version>1.2.4</version>
+		</dependency>
         
         <dependency>
 			<groupId>commons-codec</groupId>
@@ -220,6 +238,17 @@
 		    <version>1.6.0</version>
 		</dependency>
 		
+		<!-- 跨域请求相关 -->
+		<dependency>
+		    <groupId>com.thetransactioncompany</groupId>
+		    <artifactId>cors-filter</artifactId>
+		    <version>2.5</version>
+		</dependency>
+		<!-- <dependency>
+		    <groupId>com.thetransactioncompany</groupId>
+		    <artifactId>java-property-utils</artifactId>
+		    <version>1.9.1</version>
+		</dependency> -->
 	</dependencies>
 	
 	<build>  

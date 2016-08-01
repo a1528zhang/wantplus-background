@@ -1,13 +1,18 @@
 package com.plus.want.service;
 
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.plus.want.entity.User;
+import com.plus.want.entity.user.User;
 import com.plus.want.model.ResultTemplet;
 
+/**
+ * @author a1528zhang
+ *
+ */
 public interface UserService {
 	/**
 	 * @author 张黎
@@ -66,4 +71,33 @@ public interface UserService {
 	 * @return
 	 */
 	public ResultTemplet<Object> getUserList(Integer limit,Integer offset);
+	/**
+	 * @author 张黎
+	 * @date 2016年7月5日下午7:51:00
+	 * @param 
+	 * @description 批量禁用用户
+	 * @return
+	 */
+	public ResultTemplet<Object> userBan(Integer[] userId);
+	/**
+	 * @author 张黎
+	 * @date 2016年7月27日下午3:43:53
+	 * @param 
+	 * @description 通过用户名查询用户对象
+	 * @return
+	 */
+	public User getByUserName(String username);
+	/**
+	 * 通过用户名查询角色信息
+	 * @param userName
+	 * @return
+	 */
+	public Set<String> getRoles(String userName);
+	/**
+	 * 通过用户名查询权限信息
+	 * @param userId
+	 * @return
+	 */
+	public Set<String> getPermissions(String userName);
+	
 }

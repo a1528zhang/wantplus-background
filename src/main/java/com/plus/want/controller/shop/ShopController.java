@@ -1,4 +1,4 @@
-package com.plus.want.controller;
+package com.plus.want.controller.shop;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.plus.want.entity.Shop;
+import com.plus.want.entity.shop.Shop;
 import com.plus.want.model.ResultTemplet;
 import com.plus.want.service.ShopService;
 import com.plus.want.util.CommonUtil;

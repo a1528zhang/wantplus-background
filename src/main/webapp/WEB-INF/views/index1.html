@@ -7,10 +7,10 @@
 <script src="/wantplus/js/ajaxfileupload.js"></script>
 <script type="text/javascript">
 function one(){
-	var str = "?detailsId=12345=666";
-	var a = str.indexOf("?detailsId=");
-	
-	console.log(str.substring(a+11));
+	console.log(getCookie("headImg"));
+	$("#displayUsername").text(getCookie("username"));
+	$("#displayUserId").text(getCookie("userId"));
+	$("#displayHeadImg").attr("src",getCookie("headImg"));
 	 /* $.ajax({
         type: "GET",
         url: "/wantplus/action/commodity/getCommodityById?commodityId=21",
@@ -20,6 +20,34 @@ function one(){
        	 console.log(data);
         }
 	 }); */
+}
+
+function getCookie(c_name)
+{
+if (document.cookie.length>0)
+  {
+  c_start=document.cookie.indexOf(c_name + "=")
+  if (c_start!=-1)
+    { 
+    c_start=c_start + c_name.length+1 
+    c_end=document.cookie.indexOf(";",c_start)
+    if (c_end==-1) c_end=document.cookie.length
+    return unescape(document.cookie.substring(c_start,c_end))
+    } 
+  }
+return ""
+}
+
+function Setcookie(name, value)
+
+{ 
+
+    //设置名称为name,值为value的Cookie
+    var expdate = new Date();   //初始化时间
+    expdate.setTime(expdate.getTime() + 30 * 60 * 1000);   //时间
+    document.cookie = name+"="+value+";expires="+expdate.toGMTString()+";path=/";
+
+   //即document.cookie= name+"="+value+";path=/";   时间可以不要，但路径(path)必须要填写，因为JS的默认路径是当前页，如果不填，此cookie只在当前页面生效！~
 }
 
 function two(){
@@ -84,6 +112,11 @@ function login(){
         },
         success: function (data) {
         	console.log(data);
+        	if(data.state == 1){
+        		Setcookie("username",data.data.username);
+            	Setcookie("headImg",data.data.headImg);
+            	Setcookie("userId",data.data.userId);
+        	}
         }
 	})
 }
@@ -96,6 +129,14 @@ function logout(){
         dataType: "json",//返回数据的类型  
         success: function (data) {
         	console.log(data);
+        	if(data.state == 1){
+        		Setcookie("username","");
+            	Setcookie("headImg","");
+            	Setcookie("userId","");
+            	$("#displayUsername").text(getCookie(""));
+            	$("#displayUserId").text(getCookie(""));
+            	$("#displayHeadImg").attr("src",getCookie(""));
+        	}
         }
 	})
 }
@@ -147,6 +188,15 @@ function update(){
 		<a>个人博客：</a><input id="personalBlog" type="text"/>
 		<a>个人描述：</a><input id="personalDescribe" type="text"/>
 		<button onclick="update()">更新个人信息</button>
+	</div>
+	<div >
+		<p>用户名：</p><p id="displayUsername"></p>
+	</div>
+	<div >
+		<p>头像：</p><img id="displayHeadImg" src=""/>
+	</div>
+	<div >
+		<p>id:</p><p id="displayUserId"></p>
 	</div>
 </body>
 </html>

@@ -16,7 +16,7 @@
         	s.shopName,
         	s.shopUrl,
         	s.shopIcon,
-        	u.userEmail AS commodityUploadUserName,
+        	u.username AS commodityUploadUserName,
         	i.commodityImgUrl,
         	i.commodityImgSize
        	FROM
@@ -53,7 +53,7 @@
         	s.shopName,
         	s.shopUrl,
         	s.shopIcon,
-        	u.userName AS commodityUploadUserName,
+        	u.username AS commodityUploadUserName,
         	i.commodityImgUrl,
         	i.commodityImgSize
         FROM
@@ -117,7 +117,7 @@
         </where>
     </select>
     
-    <insert id="saveCommodityInfo" parameterType="com.plus.want.entity.CommodityInfo">
+    <insert id="saveCommodityInfo" parameterType="com.plus.want.entity.commodity.CommodityInfo">
     	INSERT INTO
     		want_commodity_info(
     			commodityName,
@@ -147,7 +147,7 @@
     	</selectKey>
     </insert>
     
-    <insert id="saveCommodityImg" parameterType="com.plus.want.entity.CommodityImg">
+    <insert id="saveCommodityImg" parameterType="com.plus.want.entity.commodity.CommodityImg">
 	    INSERT INTO
 	    		want_commodity_img(
 	    			commodityImgUrl,

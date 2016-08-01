@@ -3,8 +3,8 @@ package com.plus.want.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.plus.want.entity.CommodityImg;
-import com.plus.want.entity.CommodityInfo;
+import com.plus.want.entity.commodity.CommodityImg;
+import com.plus.want.entity.commodity.CommodityInfo;
 import com.plus.want.model.commoditymodel.CommodityInfoModel;
 
 public interface CommodityDAO {

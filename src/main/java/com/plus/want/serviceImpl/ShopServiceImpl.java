@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.plus.want.dao.ShopDAO;
-import com.plus.want.entity.Shop;
+import com.plus.want.entity.shop.Shop;
 import com.plus.want.model.ResultTemplet;
 import com.plus.want.model.commoditymodel.CommodityInfoModel;
 import com.plus.want.service.ShopService;

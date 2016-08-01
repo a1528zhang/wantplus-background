@@ -1,0 +1,8 @@
+/target/
+
+/.idea/
+/.settings/
+/logs/
+/wantplus.iml
+/.classpath
+/.project

@@ -3,22 +3,24 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.plus.want.dao.UserDAO">
-	<select id="selectByUserEmail" parameterType="String" resultType="com.plus.want.entity.User">
+	<select id="selectByUsername" parameterType="String" resultType="com.plus.want.entity.user.User">
 		SELECT
 			userId,
-			userEmail,
+			username,
 			userPhone,
-			nickName
+			nickName,
+			password,
+			headImg
 		FROM
 			want_user
 		WHERE
-			userEmail = #{userEmail}
+			username = #{username}
 	</select>
 	
-	<select id="selectByUserPhone" parameterType="String" resultType="com.plus.want.entity.User">
+	<select id="selectByUserPhone" parameterType="String" resultType="com.plus.want.entity.user.User">
 		SELECT
 			userId,
-			userEmail,
+			username,
 			userPhone,
 			nickName
 		FROM
@@ -27,7 +29,7 @@
 			userPhone = #{userPhone}
 	</select>
 	
-    <select id="selectUserByCondition" parameterType="java.util.Map" resultType="com.plus.want.entity.User">
+    <select id="selectUserByCondition" parameterType="java.util.Map" resultType="com.plus.want.entity.user.User">
         SELECT
 			userId,
 			userName
@@ -68,7 +70,7 @@
     			#{userPassword})
     </insert>
     
-    <select id="selectByUserId" parameterType="int" resultType="com.plus.want.entity.User">
+    <select id="selectByUserId" parameterType="int" resultType="com.plus.want.entity.user.User">
     	SELECT
 			userId,
 			userEmail,
@@ -83,7 +85,7 @@
 			userId=#{userId}
     </select>
     
-    <select id="emailLogin" parameterType="java.util.Map" resultType="com.plus.want.entity.User">
+    <select id="emailLogin" parameterType="java.util.Map" resultType="com.plus.want.entity.user.User">
     	SELECT
     		userId,
 			userEmail,
@@ -100,7 +102,7 @@
 			userPassword = #{userPassword}
     </select>
     
-     <select id="phoneLogin" parameterType="java.util.Map" resultType="com.plus.want.entity.User">
+     <select id="phoneLogin" parameterType="java.util.Map" resultType="com.plus.want.entity.user.User">
     	SELECT
     		userId,
 			userEmail,
@@ -117,7 +119,7 @@
 			userPassword = #{userPassword}
     </select>
     
-    <update id="updateUserInfo" parameterType="com.plus.want.entity.User">
+    <update id="updateUserInfo" parameterType="com.plus.want.entity.user.User">
     	UPDATE 
     		want_user
     	SET
@@ -128,7 +130,7 @@
     		userId = #{userId}
     </update>
     
-    <select id="getUserPersonalInfo" parameterType="int" resultType="com.plus.want.entity.User">
+    <select id="getUserPersonalInfo" parameterType="int" resultType="com.plus.want.entity.user.User">
     	SELECT
 			userId,
 			headImg,
@@ -148,7 +150,7 @@
     		want_user
     </select>
     
-    <select id="getUserList" parameterType="java.util.Map" resultType="com.plus.want.entity.User">
+    <select id="getUserList" parameterType="java.util.Map" resultType="com.plus.want.entity.user.User">
     	SELECT
     		userId,
 			userEmail,
@@ -163,5 +165,35 @@
 		ORDER BY 
 			userId	
 		LIMIT #{limit} OFFSET #{offset};
+    </select>
+    
+    <select id="getRoles" parameterType="String" resultType="java.util.Set">
+    	SELECT
+    		wr.roles
+    	FROM
+    		want_role wr
+    	LEFT JOIN
+    		want_user wu
+    	ON
+    		wu.id = wr.userId
+    	WHERE
+    		wu.username = #{username}
+    </select>
+    
+    <select id="getPermissions" parameterType="String" resultType="java.util.Set">
+    	SELECT
+    		wp.permission
+    	FROM
+    		want_permission wp
+    	LEFT JOIN
+    		want_role wr
+    	ON
+    		wp.id = wr.permissionId
+    	LEFT JOIN
+    		want_user wu
+    	ON
+    		wu.id = wr.userId
+    	WHERE
+    		wu.username = #{username}
     </select>
 </mapper>

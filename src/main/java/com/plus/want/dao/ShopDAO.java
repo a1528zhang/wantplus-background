@@ -2,7 +2,7 @@ package com.plus.want.dao;
 
 import java.util.List;
 
-import com.plus.want.entity.Shop;
+import com.plus.want.entity.shop.Shop;
 import com.plus.want.model.commoditymodel.CommodityInfoModel;
 
 public interface ShopDAO {

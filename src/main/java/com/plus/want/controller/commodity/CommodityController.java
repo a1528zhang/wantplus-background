@@ -1,4 +1,4 @@
-package com.plus.want.controller;
+package com.plus.want.controller.commodity;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,10 +38,10 @@ public class CommodityController {
 	@RequestMapping(method=RequestMethod.GET ,value = "/getAllLCommodity")
 	@ResponseBody
 	public String getAllLCommodity(Integer page,HttpServletRequest request,HttpServletResponse response){
-		ResultTemplet<Object> result = commodityService.getAllLCommodity(page);
-		String jsonp=request.getParameter("jsonpcallback");
-		return jsonp+"("+CommonUtil.GsonSerialize(result)+")"; 
-//		return CommonUtil.GsonSerialize(result);
+		ResultTemplet<Object> result = commodityService.getAllLCommodity(page,request.getSession(false));
+//		String jsonp=request.getParameter("jsonpcallback");
+//		return jsonp+"("+CommonUtil.GsonSerialize(result)+")"; 
+		return CommonUtil.GsonSerialize(result);
 	}
 	
 	/**

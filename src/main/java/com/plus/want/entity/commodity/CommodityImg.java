@@ -1,4 +1,4 @@
-package com.plus.want.entity;
+package com.plus.want.entity.commodity;
 
 /**
  * 商品图片信息实体类
